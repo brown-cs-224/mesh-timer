@@ -3,6 +3,7 @@ import time
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
+import configparser
 
 
 def get_vertex_count(file_name):
@@ -18,7 +19,7 @@ def get_vertex_count(file_name):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Plot the time complexity trend.')
     parser.add_argument('-c', '--compiled_file', type=str,
-                        help='Path to the compiled file', default="./mesh")
+                        help='Path to the compiled file', default=".\\mesh_build\\mesh")
     parser.add_argument('-o', '--output_file', type=str,
                         help='Path to the output image file', default="time_complexity.png")
     parser.add_argument('-i', '--input_file', type=str,
@@ -28,7 +29,9 @@ if __name__ == '__main__':
     parser.add_argument('-n', '--num_iters', type=int,
                         help="Number of recursive applications.", default=9)
     parser.add_argument('-cmd', '--command', type=str,
-                        help='The command (with parameters) to run', default="subdivide 1")
+                        help='The method to run', default="subdivide")
+    parser.add_argument('-p', '--param', type=str,
+                        help='The parameters to increment', default="1")
 
     args = parser.parse_args()
 
@@ -38,10 +41,27 @@ if __name__ == '__main__':
         f"{args.temp_dir}/{mesh_name.split('.')[0]}_{ind}.obj" for ind in range(0, args.num_iters + 1)]
     file_names[0] = args.input_file
     mesh_vertex_counts = []
+    os.system("rm temp_inis")
+    os.system("mkdir temp_inis")
     for ind in range(0, args.num_iters):
         inp_file = file_names[ind]
         out_file = file_names[ind+1]
-        sys_command = f"{args.compiled_file} {inp_file} {out_file} {args.command}"
+        new_ini = configparser.ConfigParser()
+        new_ini['IO'] = {
+            'infile': inp_file,
+            'outfile': out_file
+        }
+        new_ini["Method"] = {
+            'method': args.command
+        }
+        new_ini["PARAMETERS"] = {
+            'args1' : args.param
+        }
+        with open(f".\\temp_inis\\{args.command}_{ind}_{ind+1}.ini", 'w') as configfile:
+            new_ini.write(configfile)
+
+        sys_command = f"{args.compiled_file} .\\temp_inis\\{args.command}_{ind}_{ind+1}.ini"
+        print(sys_command)
         start_time = time.perf_counter()
         os.system(sys_command)
         end_time = time.perf_counter()
