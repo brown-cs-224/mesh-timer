@@ -6,7 +6,7 @@ To run the script, first compile your mesh code (in release mode!). The build ou
 Then, run the script with the following command:
 
 ```bash
-python timer.py -c <path_to_your_mesh_executable> 
+python timer.py -c <path_to_your_mesh_executable> -o <path_to_output_image> -i <path_to_input_mesh> -d <directory_for_intermediate meshes> -n <number_of_recursive_iterations> -cmd <method> -p <method_parameter>
 ```
 
 If you are using Qt on windows, you might run into a runtime error claiming that you are missing some .dll files. To remedy this, locate the `windeploy.exe` file in `/Qt`(look for something like `/Qt/6.5.2/mingw_64/bin/windeployqt.exe`). Run the following command:
