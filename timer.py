@@ -19,7 +19,7 @@ def get_vertex_count(file_name):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Plot the time complexity trend.')
     parser.add_argument('-c', '--compiled_file', type=str,
-                        help='Path to the compiled file', default=".\\mesh_build\\mesh")
+                        help='Path to the compiled file', default="./mesh_build/mesh")
     parser.add_argument('-o', '--output_file', type=str,
                         help='Path to the output image file', default="time_complexity.png")
     parser.add_argument('-i', '--input_file', type=str,
@@ -57,10 +57,10 @@ if __name__ == '__main__':
         new_ini["PARAMETERS"] = {
             'args1' : args.param
         }
-        with open(f".\\temp_inis\\{args.command}_{ind}_{ind+1}.ini", 'w') as configfile:
+        with open(f"./temp_inis/{args.command}_{ind}_{ind+1}.ini", 'w') as configfile:
             new_ini.write(configfile)
 
-        sys_command = f"{args.compiled_file} .\\temp_inis\\{args.command}_{ind}_{ind+1}.ini"
+        sys_command = f"{args.compiled_file} ./temp_inis/{args.command}_{ind}_{ind+1}.ini"
         print(sys_command)
         start_time = time.perf_counter()
         os.system(sys_command)
