@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import configparser
 
+import sys
 
 def get_vertex_count(file_name):
     with open(file_name, "r") as f:
@@ -18,8 +19,12 @@ def get_vertex_count(file_name):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Plot the time complexity trend.')
-    parser.add_argument('-c', '--compiled_file', type=str,
-                        help='Path to the compiled file', default="./mesh_build/mesh")
+    if sys.platform == "win32":
+        parser.add_argument('-c', '--compiled_file', type=str,
+                            help='Path to the compiled file', default=".\\mesh_build\\mesh")
+    else:
+        parser.add_argument('-c', '--compiled_file', type=str,
+                            help='Path to the compiled file', default="./mesh_build/mesh")
     parser.add_argument('-o', '--output_file', type=str,
                         help='Path to the output image file', default="time_complexity.png")
     parser.add_argument('-i', '--input_file', type=str,
@@ -57,10 +62,18 @@ if __name__ == '__main__':
         new_ini["PARAMETERS"] = {
             'args1' : args.param
         }
-        with open(f"./temp_inis/{args.command}_{ind}_{ind+1}.ini", 'w') as configfile:
-            new_ini.write(configfile)
+        if sys.platform == "win32":
+            with open(f".\\temp_inis\\{args.command}_{ind}_{ind+1}.ini", 'w') as configfile:
+                new_ini.write(configfile)
+        else:
+            with open(f"./temp_inis/{args.command}_{ind}_{ind+1}.ini", 'w') as configfile:
+                new_ini.write(configfile)
 
-        sys_command = f"{args.compiled_file} ./temp_inis/{args.command}_{ind}_{ind+1}.ini"
+        if sys.platform == "win32":
+            sys_command = f"{args.compiled_file} .\\temp_inis\\{args.command}_{ind}_{ind+1}.ini"
+        else:
+            sys_command = f"{args.compiled_file} ./temp_inis/{args.command}_{ind}_{ind+1}.ini"
+        
         print(sys_command)
         start_time = time.perf_counter()
         os.system(sys_command)
