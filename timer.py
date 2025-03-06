@@ -74,9 +74,12 @@ if __name__ == '__main__':
         else:
             sys_command = f"{args.compiled_file} ./temp_inis/{args.command}_{ind}_{ind+1}.ini"
         
-        print(sys_command)
         start_time = time.perf_counter()
-        os.system(sys_command)
+        return_code = os.system(sys_command)
+        if return_code != 0:
+            print(f"Running mesh executable failed with exit code: {return_code}")
+            sys.exit("An error occurred, exiting the program.")
+
         end_time = time.perf_counter()
         runtimes.append((end_time - start_time) * 1000)
         vertex_count = get_vertex_count(inp_file)
