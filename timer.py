@@ -59,7 +59,7 @@ if __name__ == '__main__':
         new_ini["Method"] = {
             'method': args.command
         }
-        new_ini["PARAMETERS"] = {
+        new_ini["Parameters"] = {
             'args1' : args.param
         }
         if sys.platform == "win32":
